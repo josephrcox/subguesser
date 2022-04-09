@@ -4,6 +4,7 @@ const guess = document.getElementById('guess')
 const logs = document.getElementById('guessLogs')
 const skip = document.getElementById('skip')
 const mode = document.getElementById('mode')
+const difficulty = document.getElementById('difficulty')
 const reveal = document.getElementById('reveal')
 const score = document.getElementById('score')
 
@@ -12,10 +13,11 @@ var playerscore = localStorage.getItem('score')
 async function load() {
     posts.innerHTML = "LOADING NEW POSTS..."
     guess.value = ""
-    const response = await fetch('/data/q?mode='+mode.innerText.toLowerCase())
+    const response = await fetch('/data/q?mode='+mode.innerText.toLowerCase()+"&d="+difficulty.innerText)
     const data = await response.json()
 
     posts.innerHTML = ""
+    console.info(data.data.length +" images recieved. ")
     for (let i=0;i<data.data.length;i++) {
         let maxHeight = Math.floor(Math.random() * (500 - 200 + 1)) + 200;
         posts.innerHTML += "<img src='"+data.data[i]+"' style='max-height:"+maxHeight+"px;'>"
@@ -74,7 +76,7 @@ submit.onclick = function() {
 
         if (parsedHint == "") {
             parsedHint = "You guessed <span style='font-style:italic'>"+value+"</span>, Keep trying..."
-            logs.innerHTML = hint + "<br>"
+            logs.innerHTML = parsedHint + "<br>"
         } else {
             logs.innerHTML += "You guessed <span style='font-style:italic'>"+value+"</span>, you were close! - <span style='font-weight:700;'>"+parsedHint + "</span><br>"
         }
@@ -97,6 +99,18 @@ mode.onclick = function() {
         mode.innerText = "Clean"
         mode.style.backgroundColor = "BLUE"
         mode.style.color = "White"
+    }
+}
+
+difficulty.onclick = function() {
+    if (difficulty.innerText == "Normal") {
+        difficulty.innerText = "Easy"
+        difficulty.style.backgroundColor = "RED"
+        difficulty.style.color = "black"
+    } else if (difficulty.innerText == "Easy") {
+        difficulty.innerText = "Normal"
+        difficulty.style.backgroundColor = "BLUE"
+        difficulty.style.color = "White"
     }
 }
 

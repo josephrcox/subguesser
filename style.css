@@ -27,7 +27,7 @@ body {
     flex-wrap: wrap;
 }
 
-#mode, #submit, #skip, #reveal {
+#mode, #submit, #skip, #reveal, #difficulty {
 	height: 35px;
 	padding-top: 10px;
 	text-decoration: none;
@@ -84,7 +84,7 @@ img:hover {
         justify-content: center;
     }
 
-    #mode, #submit, #skip, #reveal {
+    #mode, #submit, #skip, #reveal, #difficulty {
         width: 75vw;
     }
 }

@@ -14,33 +14,65 @@ app.get('/', function(req,res) {
 app.get('/data/q', async function(req,res) {
     var endpoint = ""
     console.log(req.query.mode)
+    var difficulty = 2
+    if (req.query.d.toLowerCase() == "easy") {
+        difficulty = 10
+    } else {
+        difficulty = 2
+    }
+
     if (req.query.mode == "clean") {
-        endpoint = "https://www.reddit.com/r/random/top/.json?t=all" 
+        endpoint = "https://www.reddit.com/r/random/top/.json?t=all&count=250" 
     } else if (req.query.mode == "nsfw") {
-        endpoint = "https://www.reddit.com/r/randnsfw/top/.json?t=all" 
+        endpoint = "https://www.reddit.com/r/randnsfw/top/.json?t=all&count=250" 
     }
     
     var posts = []
     var subreddit = ""
     while (posts.length < 5) {
         try {
+            var lastpostid = ""
             posts = []
-            console.log("fetching "+endpoint)
-            const response = await axios(endpoint)
+            var subreddit = ""
 
-            for (let i=0;i<response.data.data.children.length;i++) {
-                let post = response.data.data.children[i]
-                if (post.data.post_hint == "image" && (post.data.url_overridden_by_dest.includes("imgur") || post.data.url_overridden_by_dest.includes("redd.it")) && !post.data.subreddit.toLowerCase().includes("onlyfans")) {
-                    posts.push(post.data.url_overridden_by_dest)
-        
-                } else {
-                    console.log(post.data)
+            console.log("fetching "+endpoint)
+
+            var response = await axios(endpoint)
+            for (let j=0;j<difficulty;j++) {
+                console.log(response.data.data.children.length + " posts fetched from "+endpoint+"&after="+lastpostid)
+                for (let i=0;i<response.data.data.children.length;i++) {
+                    let post = response.data.data.children[i]
+                    if (post.data.post_hint == "image" && (post.data.url_overridden_by_dest.includes("imgur") || post.data.url_overridden_by_dest.includes("redd.it")) && !post.data.subreddit.toLowerCase().includes("onlyfans")) {
+                        posts.push(post.data.url_overridden_by_dest)
+            
+                    } else {
+                        //console.log(post.data)
+                    }
+                    if (i == response.data.data.children.length -1) {
+                        
+                        lastpostid = post.data.name
+                    }
+                }
+                if (posts.length >= 5) {
+                    subreddit = response.data.data.children[0].data.subreddit
+                    response = await axios("https://www.reddit.com/r/"+subreddit+"/top/.json?t=all&count=250"+"&after="+lastpostid)
+                    console.log(response.data.data.children)
+                    for (let i=0;i<response.data.data.children.length;i++) {
+                        let post = response.data.data.children[i]
+                        if (post.data.post_hint == "image" && (post.data.url_overridden_by_dest.includes("imgur") || post.data.url_overridden_by_dest.includes("redd.it")) && !post.data.subreddit.toLowerCase().includes("onlyfans")) {
+                            posts.push(post.data.url_overridden_by_dest)
+                
+                        } else {
+                            //console.log(post.data)
+                        }
+                        if (i == response.data.data.children.length -1) {
+                            
+                            lastpostid = post.data.name
+                        }
+                    }
                 }
             }
-            if (posts.length >= 5) {
-                console.log(response.data.data.children[0])
-                subreddit = response.data.data.children[0].data.subreddit
-            }
+
         } catch(err) {
             console.log(err.message)
         }
