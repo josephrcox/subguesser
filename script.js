@@ -46,25 +46,37 @@ submit.onclick = function() {
         let guessIndex = localStorage.getItem('sub').toLowerCase().indexOf(value)
         if (guessIndex > -1) {
             hint = ""
-            for (let i=0;i<localStorage.getItem('sub').toLowerCase().length-1;i++) {
+            for (let i=0;i<localStorage.getItem('sub').toLowerCase().length;i++) {
                 if (i < guessIndex) {
                     hint += "?"
                 } else if (i == guessIndex) {
                     hint += value
                     i += value.length
                 }
-                if (i >= guessIndex + value.length-1) {
-                    hint += "?"
+                if (i >= (guessIndex + value.length-1)) {
+                    if (hint.charAt(i) == "") {
+                        hint += "?"
+                    }
+                    
                 }
+                
             }
         }
+        console.log(hint.length, localStorage.getItem('sub').toLowerCase().length)
+        let parsedHint = ""
+        if (hint.length > localStorage.getItem('sub').toLowerCase().length) {
+            parsedHint = hint.slice(0,-1)
+        } else {
+            parsedHint = hint
+        }
+        console.log(parsedHint)
 
 
-        if (hint == "") {
-            hint = "You guessed <span style='font-style:italic'>"+value+"</span>, Keep trying..."
+        if (parsedHint == "") {
+            parsedHint = "You guessed <span style='font-style:italic'>"+value+"</span>, Keep trying..."
             logs.innerHTML = hint + "<br>"
         } else {
-            logs.innerHTML += "You guessed <span style='font-style:italic'>"+value+"</span>, you were close! - <span style='font-weight:700;'>"+hint + "</span><br>"
+            logs.innerHTML += "You guessed <span style='font-style:italic'>"+value+"</span>, you were close! - <span style='font-weight:700;'>"+parsedHint + "</span><br>"
         }
         
 
