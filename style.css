@@ -1,0 +1,90 @@
+
+
+#guess {
+    margin-bottom: 20px;
+	margin-top: 20px;
+	height:30px;
+	font-size:24px;
+	min-width: 70vw;
+	max-width: 90vw;
+	margin-inline: 5px;
+}
+
+body {
+    background-color: #12081c;
+	color: white;
+	font-family: 'Manrope', sans-serif;
+	font-size: larger;
+}
+
+.options {
+    display: flex;
+    flex-direction: column;
+	align-items: center;
+	margin-bottom: 20px;
+	border: 1px solid white;
+	padding-bottom: 10px;
+    flex-wrap: wrap;
+}
+
+#mode, #submit, #skip, #reveal {
+	height: 35px;
+	padding-top: 10px;
+	text-decoration: none;
+	background-color: lightgray;
+	color: black;
+	padding-inline: 20px;
+	margin-inline: 10px;
+	border: 1px solid black;
+	flex-grow: 1;
+}
+
+.guessorskip {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: center;
+}
+
+.title {
+	font-size: 36px;
+	font-style: italic; 
+	margin-bottom: 11px;
+}
+
+#posts {
+	display: flex;
+	flex-flow: wrap;
+	justify-content: center;
+}
+
+
+img {
+  transform: scale(1);
+  transition: transform .5s;
+  max-width: 90vw;
+}
+
+img:hover {
+  transform: scale(1.2);
+}
+
+#guessLogs {
+	text-align: center;
+	padding: 20px;
+	border-bottom: 1px solid white;
+	margin-bottom: 20px;
+}
+
+@media screen and (max-width: 600px) {
+    .guessorskip {
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    #mode, #submit, #skip, #reveal {
+        width: 75vw;
+    }
+}

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subreddit Guesser</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="title">Subreddit Guesser</div> <div>Your score: <div id="score">0</div></div>
+    </br>
+    <div class="options">
+
+        <input id="guess" autocomplete="off" placeholder="name, i.e. all" pattern="^(\d|\w)+$">
+        <br>
+        <div class="guessorskip">
+            <div id="mode" style="background-color:blue;color:white;">Clean</div>
+            <div id="submit">Guess</div> 
+            </br>
+            <div id="skip">Skip/next</div>
+            <div id="reveal">Reveal (auto-skips)</div>
+        </div>
+
+    </div>
+
+    <div id="guessLogs"></div> 
+    <div id="posts">
+
+    </div>
+
+    <script src='script.js'></script>
+</body>
+</html>
