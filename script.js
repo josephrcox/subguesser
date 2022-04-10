@@ -42,12 +42,14 @@ submit.onclick = function() {
 
     if (value == localStorage.getItem('sub').toLowerCase()) {
         logs.innerHTML = "YOU ARE CORRECT!"
-        localStorage.setItem('score', parseInt(localStorage.getItem('score')) + 1)
         if (difficulty.innerText == "Easy") {
             playerscore += 25
+            localStorage.setItem('score', parseInt(localStorage.getItem('score')) + 25)
         } else {
             playerscore += 100
+            localStorage.setItem('score', parseInt(localStorage.getItem('score')) + 100)
         }
+        score.innerHTML = playerscore
         
     } else {
         let guessIndex = localStorage.getItem('sub').toLowerCase().indexOf(value)
