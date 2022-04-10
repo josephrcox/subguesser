@@ -43,12 +43,11 @@ submit.onclick = function() {
     if (value == localStorage.getItem('sub').toLowerCase()) {
         logs.innerHTML = "YOU ARE CORRECT!"
         if (difficulty.innerText == "Easy") {
-            playerscore += 25
             localStorage.setItem('score', parseInt(localStorage.getItem('score')) + 25)
         } else {
-            playerscore += 100
             localStorage.setItem('score', parseInt(localStorage.getItem('score')) + 100)
         }
+        playerscore = localStorage.getItem('score')
         score.innerHTML = playerscore
         
     } else {
