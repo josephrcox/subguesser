@@ -38,6 +38,9 @@ async function load() {
 
 submit.onclick = function() {
     let value = guess.value.toLowerCase()
+    if (value.length < 1) {
+        return null
+    }
     let hint = ""
 
     if (value == localStorage.getItem('sub').toLowerCase()) {
