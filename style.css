@@ -37,6 +37,7 @@ body {
 	margin-inline: 10px;
 	border: 1px solid black;
 	flex-grow: 1;
+    cursor: pointer;
 }
 
 .guessorskip {
@@ -74,6 +75,16 @@ img:hover {
 	padding: 20px;
 	border-bottom: 1px solid white;
 	margin-bottom: 20px;
+}
+
+.explore {
+	color: red;
+	font-size: 12px;
+    cursor: pointer;
+}
+
+.score {
+    font-size: 12px;
 }
 
 @media screen and (max-width: 600px) {
