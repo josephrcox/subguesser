@@ -1,13 +1,19 @@
 
 
 #guess {
-    margin-bottom: 20px;
-	margin-top: 20px;
 	height:30px;
-	font-size:24px;
-	min-width: 70vw;
-	max-width: 90vw;
 	margin-inline: 5px;
+
+	border-radius: 10px;
+	padding: 9px;
+	border: 0;
+	margin-top: 8px;
+	margin-bottom: 3px;
+	font-family: inherit;
+	font-style: inherit;
+	font-size: inherit;
+	width: 50vw;
+	max-width: 300px;
 }
 
 body {
