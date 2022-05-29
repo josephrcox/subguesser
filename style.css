@@ -8,16 +8,16 @@
 	padding: 9px;
 	border: 0;
 	margin-top: 8px;
-	margin-bottom: 3px;
+	margin-bottom: 9px;
 	font-family: inherit;
 	font-style: inherit;
 	font-size: inherit;
-	width: 50vw;
-	max-width: 300px;
+	width: 65vw;
+	max-width: 400px;
 }
 
 body {
-    background-color: #12081c;
+    background-color: #313a5c;
 	color: white;
 	font-family: 'Manrope', sans-serif;
 	font-size: larger;
@@ -25,12 +25,12 @@ body {
 
 .options {
     display: flex;
-    flex-direction: column;
 	align-items: center;
 	margin-bottom: 20px;
-	border: 1px solid white;
+	/*! border: 1px solid white; */
 	padding-bottom: 10px;
     flex-wrap: wrap;
+    justify-content: center;
 }
 
 #mode, #submit, #skip, #reveal, #difficulty {
@@ -44,6 +44,7 @@ body {
 	border: 1px solid black;
 	flex-grow: 1;
     cursor: pointer;
+	border-radius: 15px
 }
 
 .guessorskip {
@@ -56,7 +57,6 @@ body {
 .title {
 	font-size: 36px;
 	font-style: italic; 
-	margin-bottom: 11px;
 }
 
 #posts {
@@ -78,7 +78,7 @@ img:hover {
 
 #guessLogs {
 	text-align: center;
-	padding: 20px;
+	/*! padding: 20px; */
 	border-bottom: 1px solid white;
 	margin-bottom: 20px;
 }
@@ -90,7 +90,73 @@ img:hover {
 }
 
 .score {
-    font-size: 12px;
+    font-size: 19px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-around;
+  background-color: #000139;
+  color: white;
+  align-items: center;
+  border-radius: 15px;
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+
+
+
+#helpopen {
+  background-color: #edde00;
+  padding: 10px;
+  border-radius: 16px;
+  color: black;
+  cursor: pointer;
+}
+
+
+#helpclose {
+  margin-right: 20px;
+  margin-top: 20px;
+  background-color: black;
+  height: fit-content;
+  padding-block: 10px;
+  color: white;
+  padding-inline: 10px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+
+#helpmodal {
+	display: none;
+	width: calc(100vw - 10vw);
+	height: calc(100vh - 10vh);
+	position: fixed;
+	background-color: #ddf666;
+	top: 5vh;
+	left: 5vw;
+	color: black;
+	border-radius: 30px;
+  }
+
+#reveal {
+  background-color: #870000;
+  color: wheat;
+}
+
+.help_content {
+  height: 71vh;
+  overflow: scroll;
+}
+
+table, td, th {
+  border: 1px solid;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
 }
 
 @media screen and (max-width: 600px) {
@@ -104,4 +170,7 @@ img:hover {
     #mode, #submit, #skip, #reveal, #difficulty {
         width: 75vw;
     }
+	.header {
+		  flex-direction: column;
+	}
 }

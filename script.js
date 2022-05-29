@@ -1,5 +1,4 @@
 const posts = document.getElementById("posts")
-const submit = document.getElementById('submit')
 const guess = document.getElementById('guess')
 const logs = document.getElementById('guessLogs')
 const skip = document.getElementById('skip')
@@ -7,8 +6,14 @@ const mode = document.getElementById('mode')
 const difficulty = document.getElementById('difficulty')
 const reveal = document.getElementById('reveal')
 const score = document.getElementById('score')
+const help_open = document.getElementById('helpopen')
+const help_close = document.getElementById('helpclose')
+const help_modal = document.getElementById('helpmodal')
 
 var playerscore = localStorage.getItem('score')
+
+let time_start
+let time_end
 
 async function load() {
     posts.innerHTML = "LOADING NEW POSTS..."
@@ -31,12 +36,20 @@ async function load() {
         localStorage.setItem('score', 0)
     }
     score.innerHTML = playerscore
+    time_start = performance.now()
+    if (difficulty.innerText == "Hard") {
+        setTimeout(function() {
+            if (difficulty.innerText == "Hard") {
+                skip.click()
+            }
 
+        }, 30000)
+    }
 }
 
 
 
-submit.onclick = function() {
+function submit() {
     let value = guess.value.toLowerCase()
     if (value.length < 1) {
         return null
@@ -44,14 +57,38 @@ submit.onclick = function() {
     let hint = ""
 
     if (value == localStorage.getItem('sub').toLowerCase()) {
-        logs.innerHTML = "YOU ARE CORRECT!"
+        time_end = performance.now()
+        let m
         if (difficulty.innerText == "Easy") {
-            localStorage.setItem('score', parseInt(localStorage.getItem('score')) + 25)
-        } else {
-            localStorage.setItem('score', parseInt(localStorage.getItem('score')) + 100)
+            let x = ((time_end - time_start)/1000)
+            m = 25 + ((60 - x)*2)
+            if (m < 25) {
+                m = 25
+            }
+            m = Math.floor(m)
+            localStorage.setItem('score', parseInt(localStorage.getItem('score')) + m)
+        } else if (difficulty.innerText == "Normal") {
+            let x = ((time_end - time_start)/1000)
+            m = 50 + ((60 - x)*3)
+            if (m < 50) {
+                m = 50
+            }
+            m = Math.floor(m)
+            localStorage.setItem('score', parseInt(localStorage.getItem('score')) + m)
+        } else if (difficulty.innerText == "Hard") {
+            let x = ((time_end - time_start)/1000)
+            m = 200 + ((30 - x)*3)
+            if (m < 50) {
+                m = 50
+            }
+            m = Math.floor(m)
+            localStorage.setItem('score', parseInt(localStorage.getItem('score')) + m)
         }
         playerscore = localStorage.getItem('score')
         score.innerHTML = playerscore
+
+        logs.innerHTML = "You got it! 🎉 <br/>This was guessed in " + ((time_end - time_start)/1000) + " seconds.<br/> + " + m + " pts"
+
         
     } else {
         let guessIndex = localStorage.getItem('sub').toLowerCase().indexOf(value)
@@ -113,13 +150,17 @@ mode.onclick = function() {
 
 difficulty.onclick = function() {
     if (difficulty.innerText == "Normal") {
-        difficulty.innerText = "Easy"
+        difficulty.innerText = "Hard"
         difficulty.style.backgroundColor = "RED"
         difficulty.style.color = "black"
     } else if (difficulty.innerText == "Easy") {
         difficulty.innerText = "Normal"
         difficulty.style.backgroundColor = "BLUE"
         difficulty.style.color = "White"
+    } else if (difficulty.innerText = "Hard") {
+        difficulty.innerText = "Easy"
+        difficulty.style.backgroundColor = "Lightgreen"
+        difficulty.style.color = "black"
     }
 }
 
@@ -131,9 +172,28 @@ reveal.onclick = function() {
 guess.addEventListener('keyup', function(event) {
     if (event.keyCode === 13) {
         event.preventDefault()
-        submit.click()
+        if (logs.innerHTML.includes('You got it!')) {
+            skip.click()
+        } else {
+            submit()
+        }
+
     }
 })
+
+help_open.addEventListener('click', function() {
+    if (help_modal.style.display == 'block') {
+        help_modal.style.display = 'none'
+    } else {
+        help_modal.style.display = 'block'
+    }
+})
+help_close.addEventListener('click', function() {
+    help_modal.style.display = 'none'
+})
+
+
+
 load()
 
 String.prototype.replaceAt = function(index, replacement) {
