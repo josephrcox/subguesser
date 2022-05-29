@@ -15,9 +15,16 @@ var playerscore = localStorage.getItem('score')
 let time_start
 let time_end
 
+let hard_timeout
+
 async function load() {
     posts.innerHTML = "LOADING NEW POSTS..."
     guess.value = ""
+    if (localStorage.history != null) {
+        localStorage.history = localStorage.history.replaceAll('null', '')
+    }
+
+    document.getElementById('help_history').innerHTML = localStorage.history
     const response = await fetch('/data/q?mode='+mode.innerText.toLowerCase()+"&d="+difficulty.innerText)
     const data = await response.json()
 
@@ -38,12 +45,12 @@ async function load() {
     score.innerHTML = playerscore
     time_start = performance.now()
     if (difficulty.innerText == "Hard") {
-        setTimeout(function() {
+        hard_timeout = setTimeout(function() {
             if (difficulty.innerText == "Hard") {
                 skip.click()
             }
 
-        }, 30000)
+        }, 10000)
     }
 }
 
@@ -77,15 +84,18 @@ function submit() {
             localStorage.setItem('score', parseInt(localStorage.getItem('score')) + m)
         } else if (difficulty.innerText == "Hard") {
             let x = ((time_end - time_start)/1000)
-            m = 200 + ((30 - x)*3)
-            if (m < 50) {
-                m = 50
+            m = 200 + ((10 - x)*50)
+            if (m < 200) {
+                m = 200
             }
             m = Math.floor(m)
             localStorage.setItem('score', parseInt(localStorage.getItem('score')) + m)
         }
         playerscore = localStorage.getItem('score')
+        localStorage.setItem('history', localStorage.getItem('history') +"<strong>"+m+"</strong> pts for <strong><a href='https://www.reddit.com/r/"+value+"'>"+value+"</a></strong> in <strong>"+((time_end - time_start)/1000)+"</strong> seconds (<strong>"+difficulty.innerText+"</strong>)<br/>")
+        document.getElementById('help_history').innerHTML = localStorage.history
         score.innerHTML = playerscore
+        clearTimeout(hard_timeout)
 
         logs.innerHTML = "You got it! 🎉 <br/>This was guessed in " + ((time_end - time_start)/1000) + " seconds.<br/> + " + m + " pts"
 
@@ -133,6 +143,10 @@ function submit() {
 }
 
 skip.onclick = function() {
+    clearTimeout(hard_timeout)
+    if (!logs.innerHTML.includes('You got it!')) {
+        localStorage.setItem('history', localStorage.getItem('history') + "You couldn't guess <a href='https://www.reddit.com/r/"+localStorage.getItem('sub')+"'><strong>"+localStorage.getItem('sub')+"</a></strong> (<strong>"+difficulty.innerText+"</strong>)<br/>")
+    }
     load()
 }
 
