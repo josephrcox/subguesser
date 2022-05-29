@@ -168,7 +168,8 @@ table {
     }
 
     #mode, #submit, #skip, #reveal, #difficulty {
-        width: 75vw;
+        width: 50vw;
+        margin-bottom: 7px;
     }
 	.header {
 		  flex-direction: column;
