@@ -147,7 +147,7 @@ img:hover {
 
 .help_content {
   height: 71vh;
-  overflow: scroll;
+  overflow: auto;
 }
 
 table, td, th {
