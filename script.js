@@ -16,15 +16,28 @@ let time_start
 let time_end
 
 let hard_timeout
+let scorelast = ""
+
+const easyWinScore = 25
+const normalWinScore = 50
+const hardWinScore = 200
+const easySkip = 5
+const normalSkip = 10
+const hardSkip = 50
 
 async function load() {
     posts.innerHTML = "LOADING NEW POSTS..."
     guess.value = ""
+    if (playerscore == null) {
+        playerscore = 0
+        localStorage.setItem('score', 0)
+    }
+    score.innerText = playerscore + scorelast
     if (localStorage.history != null) {
         localStorage.history = localStorage.history.replaceAll('null', '')
     }
 
-    document.getElementById('help_history').innerHTML = localStorage.history
+    document.getElementById('help_history').innerHTML = localStorage.history + ""
     const response = await fetch('/data/q?mode='+mode.innerText.toLowerCase()+"&d="+difficulty.innerText)
     const data = await response.json()
 
@@ -38,11 +51,6 @@ async function load() {
     localStorage.setItem('sub', data.subreddit)
     logs.innerHTML = ""
 
-    if (playerscore == null) {
-        playerscore = 0
-        localStorage.setItem('score', 0)
-    }
-    score.innerHTML = playerscore
     time_start = performance.now()
     if (difficulty.innerText == "Hard") {
         hard_timeout = setTimeout(function() {
@@ -68,33 +76,35 @@ function submit() {
         let m
         if (difficulty.innerText == "Easy") {
             let x = ((time_end - time_start)/1000)
-            m = 25 + ((60 - x)*2)
-            if (m < 25) {
-                m = 25
+            m = easyWinScore + ((60 - x)*2)
+            if (m < easyWinScore) {
+                m = easyWinScore
             }
             m = Math.floor(m)
             localStorage.setItem('score', parseInt(localStorage.getItem('score')) + m)
         } else if (difficulty.innerText == "Normal") {
             let x = ((time_end - time_start)/1000)
-            m = 50 + ((60 - x)*3)
-            if (m < 50) {
-                m = 50
+            m = normalWinScore + ((60 - x)*2)
+            if (m < normalWinScore) {
+                m = normalWinScore
             }
             m = Math.floor(m)
             localStorage.setItem('score', parseInt(localStorage.getItem('score')) + m)
         } else if (difficulty.innerText == "Hard") {
             let x = ((time_end - time_start)/1000)
-            m = 200 + ((10 - x)*50)
-            if (m < 200) {
-                m = 200
+            m = hardWinScore + ((10 - x)*50)
+            if (m < hardWinScore) {
+                m = hardWinScore
             }
             m = Math.floor(m)
             localStorage.setItem('score', parseInt(localStorage.getItem('score')) + m)
         }
         playerscore = localStorage.getItem('score')
-        localStorage.setItem('history', localStorage.getItem('history') +"<strong>"+m+"</strong> pts for <strong><a href='https://www.reddit.com/r/"+value+"'>"+value+"</a></strong> in <strong>"+((time_end - time_start)/1000)+"</strong> seconds (<strong>"+difficulty.innerText+"</strong>)<br/>")
+        localStorage.setItem('history', localStorage.getItem('history') +"<strong>"+localStorage.score+" pts</strong>: +"+m+" pts for <strong><a href='https://www.reddit.com/r/"+value+"'>"+value+"</a></strong> in <strong>"+((time_end - time_start)/1000)+"</strong> seconds (<strong>"+difficulty.innerText+"</strong>)<br/>")
+        localStorage.history = localStorage.history.replaceAll('null', '')
         document.getElementById('help_history').innerHTML = localStorage.history
-        score.innerHTML = playerscore
+        scorelast = " (+"+m+")"
+        score.innerText = playerscore + scorelast
         clearTimeout(hard_timeout)
 
         logs.innerHTML = "You got it! 🎉 <br/>This was guessed in " + ((time_end - time_start)/1000) + " seconds.<br/> + " + m + " pts"
@@ -145,8 +155,28 @@ function submit() {
 skip.onclick = function() {
     clearTimeout(hard_timeout)
     if (!logs.innerHTML.includes('You got it!')) {
-        localStorage.setItem('history', localStorage.getItem('history') + "You couldn't guess <a href='https://www.reddit.com/r/"+localStorage.getItem('sub')+"'><strong>"+localStorage.getItem('sub')+"</a></strong> (<strong>"+difficulty.innerText+"</strong>)<br/>")
-    }
+        switch(difficulty.innerText) {
+            case "Easy":
+                localStorage.setItem('score', parseInt(localStorage.getItem('score')) - easySkip)
+                localStorage.setItem('history', localStorage.getItem('history') + "<strong>"+localStorage.score+" pts</strong>: -"+easySkip+" pts because you couldn't guess <a href='https://www.reddit.com/r/"+localStorage.getItem('sub')+"'><strong>"+localStorage.getItem('sub')+"</a></strong> (<strong>"+difficulty.innerText+"</strong>)<br/>")
+                scorelast = " (-"+easySkip+")"
+                break;
+            case "Normal":
+                localStorage.setItem('score', parseInt(localStorage.getItem('score')) - normalSkip)
+                localStorage.setItem('history', localStorage.getItem('history') + "<strong>"+localStorage.score+" pts</strong>: -"+normalSkip+" pts because you couldn't guess <a href='https://www.reddit.com/r/"+localStorage.getItem('sub')+"'><strong>"+localStorage.getItem('sub')+"</a></strong> (<strong>"+difficulty.innerText+"</strong>)<br/>")
+                scorelast = " (-"+normalSkip+")"
+                break;
+            case "Hard":
+                localStorage.setItem('score', parseInt(localStorage.getItem('score')) - hardSkip)
+                localStorage.setItem('history', localStorage.getItem('history') + "<strong>"+localStorage.score+" pts</strong>: -"+hardSkip+" pts because you couldn't guess <a href='https://www.reddit.com/r/"+localStorage.getItem('sub')+"'><strong>"+localStorage.getItem('sub')+"</a></strong> (<strong>"+difficulty.innerText+"</strong>)<br/>")
+                scorelast = " (-"+hardSkip+")"
+                break;
+        }
+        localStorage.history = localStorage.history.replaceAll('null', '')
+        
+        playerscore = localStorage.getItem('score')
+
+    } 
     load()
 }
 

@@ -152,6 +152,7 @@ img:hover {
 
 table, td, th {
   border: 1px solid;
+  width: min-content;
 }
 
 table {
