@@ -174,5 +174,6 @@ table {
     }
 	.header {
 		  flex-direction: column;
+		align-items: baseline;
 	}
 }
