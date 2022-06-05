@@ -79,8 +79,9 @@ app.get('/data/q', async function(req,res) {
         
         
     }
-
-    res.json({data:posts, subreddit:subreddit})
+    subreddit = 'break_yo_dick_thick'
+    let parsed = subreddit.replaceAll('_','')
+    res.json({data:posts, subreddit:parsed, real:subreddit})
 })
 
 // KEEP AT BOTTOM OF PAGE NOMATTER WHAT

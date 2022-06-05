@@ -49,6 +49,7 @@ async function load() {
     }
 
     localStorage.setItem('sub', data.subreddit)
+    localStorage.setItem('real', data.real)
     logs.innerHTML = ""
 
     time_start = performance.now()
@@ -100,7 +101,7 @@ function submit() {
             localStorage.setItem('score', parseInt(localStorage.getItem('score')) + m)
         }
         playerscore = localStorage.getItem('score')
-        localStorage.setItem('history', localStorage.getItem('history') +"<strong>"+localStorage.score+" pts</strong>: +"+m+" pts for <strong><a href='https://www.reddit.com/r/"+value+"'>"+value+"</a></strong> in <strong>"+((time_end - time_start)/1000)+"</strong> seconds (<strong>"+difficulty.innerText+"</strong>)<br/>")
+        localStorage.setItem('history', localStorage.getItem('history') +"<strong>"+localStorage.score+" pts</strong>: +"+m+" pts for <strong><a href='https://www.reddit.com/r/"+localStorage.getItem('real')+"'>"+value+"</a></strong> in <strong>"+((time_end - time_start)/1000)+"</strong> seconds (<strong>"+difficulty.innerText+"</strong>)<br/>")
         localStorage.history = localStorage.history.replaceAll('null', '')
         document.getElementById('help_history').innerHTML = localStorage.history
         scorelast = " (+"+m+")"
@@ -158,17 +159,17 @@ skip.onclick = function() {
         switch(difficulty.innerText) {
             case "Easy":
                 localStorage.setItem('score', parseInt(localStorage.getItem('score')) - easySkip)
-                localStorage.setItem('history', localStorage.getItem('history') + "<strong>"+localStorage.score+" pts</strong>: -"+easySkip+" pts because you couldn't guess <a href='https://www.reddit.com/r/"+localStorage.getItem('sub')+"'><strong>"+localStorage.getItem('sub')+"</a></strong> (<strong>"+difficulty.innerText+"</strong>)<br/>")
+                localStorage.setItem('history', localStorage.getItem('history') + "<strong>"+localStorage.score+" pts</strong>: -"+easySkip+" pts because you couldn't guess <a href='https://www.reddit.com/r/"+localStorage.getItem('real')+"'><strong>"+localStorage.getItem('sub')+"</a></strong> (<strong>"+difficulty.innerText+"</strong>)<br/>")
                 scorelast = " (-"+easySkip+")"
                 break;
             case "Normal":
                 localStorage.setItem('score', parseInt(localStorage.getItem('score')) - normalSkip)
-                localStorage.setItem('history', localStorage.getItem('history') + "<strong>"+localStorage.score+" pts</strong>: -"+normalSkip+" pts because you couldn't guess <a href='https://www.reddit.com/r/"+localStorage.getItem('sub')+"'><strong>"+localStorage.getItem('sub')+"</a></strong> (<strong>"+difficulty.innerText+"</strong>)<br/>")
+                localStorage.setItem('history', localStorage.getItem('history') + "<strong>"+localStorage.score+" pts</strong>: -"+normalSkip+" pts because you couldn't guess <a href='https://www.reddit.com/r/"+localStorage.getItem('real')+"'><strong>"+localStorage.getItem('sub')+"</a></strong> (<strong>"+difficulty.innerText+"</strong>)<br/>")
                 scorelast = " (-"+normalSkip+")"
                 break;
             case "Hard":
                 localStorage.setItem('score', parseInt(localStorage.getItem('score')) - hardSkip)
-                localStorage.setItem('history', localStorage.getItem('history') + "<strong>"+localStorage.score+" pts</strong>: -"+hardSkip+" pts because you couldn't guess <a href='https://www.reddit.com/r/"+localStorage.getItem('sub')+"'><strong>"+localStorage.getItem('sub')+"</a></strong> (<strong>"+difficulty.innerText+"</strong>)<br/>")
+                localStorage.setItem('history', localStorage.getItem('history') + "<strong>"+localStorage.score+" pts</strong>: -"+hardSkip+" pts because you couldn't guess <a href='https://www.reddit.com/r/"+localStorage.getItem('real')+"'><strong>"+localStorage.getItem('sub')+"</a></strong> (<strong>"+difficulty.innerText+"</strong>)<br/>")
                 scorelast = " (-"+hardSkip+")"
                 break;
         }
