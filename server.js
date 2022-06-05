@@ -79,7 +79,6 @@ app.get('/data/q', async function(req,res) {
         
         
     }
-    subreddit = 'break_yo_dick_thick'
     let parsed = subreddit.replaceAll('_','')
     res.json({data:posts, subreddit:parsed, real:subreddit})
 })
