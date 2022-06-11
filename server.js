@@ -83,6 +83,11 @@ app.get('/data/q', async function(req,res) {
     res.json({data:posts, subreddit:parsed, real:subreddit})
 })
 
+app.get('/testing', function(req,res) {
+
+    res.json({status:'ok'})
+})
+
 // KEEP AT BOTTOM OF PAGE NOMATTER WHAT
 const port = process.env.PORT || 8080;
 app.listen(port, () => {
