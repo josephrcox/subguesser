@@ -48,15 +48,17 @@ async function load() {
     console.info(data.data.length +" images recieved. ")
     
     for (let i=0;i<data.data.length;i++) {
-        let maxHeight = Math.floor(Math.random() * (500 - 200 + 1)) + 200;
         if (data.data[i].includes("gifv")) {
             console.log()
-            posts.innerHTML += '<video controls preload="metadata" autoplay="false" muted loop="loop" height: 280px;"><source src="'+(data.data[i].replace("gifv", "mp4"))+'" type="video/mp4"></video>'
+            posts.innerHTML += '<video controls preload="metadata" autoplay="false" muted loop="loop"><source src="'+(data.data[i].replace("gifv", "mp4"))+'" type="video/mp4"></video>'
         } else {
-            posts.innerHTML += "<img src='"+data.data[i]+"' style='max-height:"+maxHeight+"px;'>"
+            posts.innerHTML += "<img src='"+data.data[i]+"' data-src:'"+data.data[i]+"' loading='lazy'>"
         }
 
     }
+
+
+
 
     localStorage.setItem('sub', data.subreddit)
     localStorage.setItem('real', data.real)
@@ -71,6 +73,7 @@ async function load() {
 
         }, 10000)
     }
+
 }
 
 

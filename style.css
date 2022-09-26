@@ -1,5 +1,3 @@
-
-
 #guess {
 	height:30px;
 	margin-inline: 5px;
@@ -35,16 +33,24 @@ body {
 
 #mode, #submit, #skip, #reveal, #difficulty, #videos {
 	height: 35px;
-	padding-top: 10px;
+	padding-top: 15px;
 	text-decoration: none;
 	background-color: lightgray;
 	color: black;
-	padding-inline: 20px;
-	margin-inline: 10px;
+	padding-inline: 15px;
+	margin-inline: 5px;
 	border: 1px solid black;
-	flex-grow: 1;
     cursor: pointer;
-	border-radius: 15px
+	border-radius: 15px;
+	margin-top: 7px;
+	transition: all 0.2s;
+	-webkit-touch-callout: none; /* iOS Safari */
+	-webkit-user-select: none; /* Safari */
+	 -khtml-user-select: none; /* Konqueror HTML */
+	   -moz-user-select: none; /* Old versions of Firefox */
+		-ms-user-select: none; /* Internet Explorer/Edge */
+			user-select: none; /* Non-prefixed version, currently
+								  supported by Chrome, Edge, Opera and Firefox */
 }
 
 .guessorskip {
@@ -56,30 +62,33 @@ body {
 
 .title {
 	font-size: 36px;
-	font-style: italic; 
 }
 
 #posts {
 	display: flex;
 	flex-flow: wrap;
 	justify-content: center;
+	padding: 10px;
 }
 
 
-img {
+img, video {
   transform: scale(1);
-  transition: transform .5s;
-  max-width: 90vw;
+  transition: transform .3s;
+  margin: 2px;
+  min-width: 184px;
+  max-height: 250px;
+  object-fit:contain;
 }
 
 img:hover {
   transform: scale(1.2);
+  z-index: 5;
+  filter: drop-shadow(0px 10px 10px #000);
 }
 
 #guessLogs {
 	text-align: center;
-	/*! padding: 20px; */
-	border-bottom: 1px solid white;
 	margin-bottom: 20px;
 }
 
@@ -91,6 +100,7 @@ img:hover {
 
 .score {
     font-size: 19px;
+    color: #a6a6a6;
 }
 
 .header {
@@ -112,6 +122,7 @@ img:hover {
   border-radius: 16px;
   color: black;
   cursor: pointer;
+  margin: 5px;
 }
 
 
@@ -161,19 +172,16 @@ table {
 }
 
 @media screen and (max-width: 600px) {
-    .guessorskip {
-        display: flex;
-        flex-direction: column;
-        flex-wrap: wrap;
-        justify-content: center;
-    }
-
-    #mode, #submit, #skip, #reveal, #difficulty {
-        width: 50vw;
-        margin-bottom: 7px;
-    }
-	.header {
-		  flex-direction: column;
-		align-items: baseline;
+  .title {
+		font-size: 22px;
+  }
+	.score {
+		font-size: 13px;
 	}
+  #mode, #submit, #skip, #reveal, #difficulty, #videos {
+	font-size: 16px;
+	padding: 13px;
+	height: unset;
+  }
+  
 }
