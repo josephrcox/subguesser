@@ -33,7 +33,7 @@ body {
     justify-content: center;
 }
 
-#mode, #submit, #skip, #reveal, #difficulty {
+#mode, #submit, #skip, #reveal, #difficulty, #videos {
 	height: 35px;
 	padding-top: 10px;
 	text-decoration: none;

@@ -4,6 +4,7 @@ const logs = document.getElementById('guessLogs')
 const skip = document.getElementById('skip')
 const mode = document.getElementById('mode')
 const difficulty = document.getElementById('difficulty')
+const videos = document.getElementById('videos')
 const reveal = document.getElementById('reveal')
 const score = document.getElementById('score')
 const help_open = document.getElementById('helpopen')
@@ -11,6 +12,8 @@ const help_close = document.getElementById('helpclose')
 const help_modal = document.getElementById('helpmodal')
 
 var playerscore = localStorage.getItem('score')
+
+let SUBREDDIT_OVERRIDE = ""
 
 let time_start
 let time_end
@@ -38,14 +41,21 @@ async function load() {
     }
 
     document.getElementById('help_history').innerHTML = localStorage.history + ""
-    const response = await fetch('/data/q?mode='+mode.innerText.toLowerCase()+"&d="+difficulty.innerText)
+    const response = await fetch('/data/q?mode='+mode.innerText.toLowerCase()+"&d="+difficulty.innerText+"&suboverride="+SUBREDDIT_OVERRIDE+"&videos="+videos.innerText.toLowerCase())
     const data = await response.json()
 
     posts.innerHTML = ""
     console.info(data.data.length +" images recieved. ")
+    
     for (let i=0;i<data.data.length;i++) {
         let maxHeight = Math.floor(Math.random() * (500 - 200 + 1)) + 200;
-        posts.innerHTML += "<img src='"+data.data[i]+"' style='max-height:"+maxHeight+"px;'>"
+        if (data.data[i].includes("gifv")) {
+            console.log()
+            posts.innerHTML += '<video controls preload="metadata" autoplay="false" muted loop="loop" height: 280px;"><source src="'+(data.data[i].replace("gifv", "mp4"))+'" type="video/mp4"></video>'
+        } else {
+            posts.innerHTML += "<img src='"+data.data[i]+"' style='max-height:"+maxHeight+"px;'>"
+        }
+
     }
 
     localStorage.setItem('sub', data.subreddit)
@@ -208,6 +218,18 @@ difficulty.onclick = function() {
         difficulty.style.color = "black"
     }
 }
+
+videos.onclick = function() {
+    if (videos.innerText == "Videos") {
+        videos.innerText = "No videos"
+        videos.style.backgroundColor = "gray"
+    } else {
+        videos.innerText = "Videos"
+        videos.style.backgroundColor = "blue"
+    } 
+}
+
+
 
 reveal.onclick = function() {
     window.open("https://www.reddit.com/r/"+localStorage.getItem('sub')+"/top")
