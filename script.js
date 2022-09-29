@@ -50,9 +50,21 @@ async function load() {
     for (let i=0;i<data.data.length;i++) {
         if (data.data[i].includes("gifv")) {
             console.log()
-            posts.innerHTML += '<video controls preload="metadata" autoplay="false" muted loop="loop"><source src="'+(data.data[i].replace("gifv", "mp4"))+'" type="video/mp4"></video>'
+            let video = document.createElement('video')
+            let source = document.createElement('source')
+            source.src = data.data[i].replace("gifv", "mp4")
+            source.type = "video/mp4"
+            video.appendChild(source)
+            video.autoplay = true
+            video.loop = true
+            video.muted = true
+            posts.append(video)
+            //posts.innerHTML += '<video controls preload="metadata" autoplay="false" muted loop="loop"><source src="'+(data.data[i].replace("gifv", "mp4"))+'" type="video/mp4"></video>'
         } else {
-            posts.innerHTML += "<img src='"+data.data[i]+"' data-src:'"+data.data[i]+"' loading='lazy'>"
+            let image = new Image()
+            image.src = data.data[i]
+            image.loading = "lazy"
+            posts.append(image)
         }
 
     }
