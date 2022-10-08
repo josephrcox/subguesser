@@ -19,25 +19,47 @@
 </head>
 <body>
     <div class="header">
-        <div class="title">Subreddit Guesser <a class="explore" href="https://github.com/mapleweekend/subreddit-guesser">GitHub</a></div> 
+        <div class="title">subguesser</div> 
         <div class="score">Your score: <div id="score">0</div></div>
     </div>
 
     <div class="options">
+        <div class="options_top">
+            <input id="guess" autocomplete="off" placeholder="Guess and press enter!" pattern="^(\d|\w)+$"> 
+            <div>
+                <span id="submit">Skip</span>
+                <img id="reveal_reddit_logo" src='reddit.png'>
+            </div>
 
-        <input id="guess" autocomplete="off" placeholder="Guess and press enter!" pattern="^(\d|\w)+$"> 
+        </div>       
         <span id="helpopen">Help</span>
-        <br>
-        <div class="guessorskip">
-            <div id="mode" style="background-color:blue;color:white;">Clean</div>
-            <div id="difficulty" style="background-color:blue;color:white;">Normal</div>
-            <div id="videos" style="background-color:blue;color:white;">Videos</div>
-            </br>
-            <div id="skip">Skip/next</div>
-            <div id="reveal">Reveal (auto-skips)</div>
+        <div class="toggles">
+            <div>
+                <span class='option_label'>Hard mode</span>
+                <label class="switch"> 
+                    <input type="checkbox" id="difficulty">
+                    <span class="slider round"></span>
+                </label>
+            </div>
+            <div>
+                <span class='option_label'>NSFW</span>
+                <label class="switch"> 
+                    <input type="checkbox" id="mode">
+                    <span class="slider round"></span>
+                </label>
+            </div>
+            <div>
+                <span class='option_label'>Videos</span>
+                <label class="switch"> 
+                    <input type="checkbox" id="videos">
+                    <span class="slider round"></span>
+                </label>
+            </div>
         </div>
-
     </div>
+
+
+
 
     <div id="guessLogs"></div> 
     <div id="posts">
@@ -68,12 +90,6 @@
                         <td>Description</td>
                         <td>Winning score</td>
                         <td>Skip penalty</td>
-                    </tr>
-                    <tr>
-                        <td style="background-color: lightgreen;">Easy</td>
-                        <td>Loads the most photos</td>
-                        <td>25 points + time multiplier</td>
-                        <td>5 points</td>
                     </tr>
                     <tr>
                         <td style="background-color: blue;color: white;">Normal</td>

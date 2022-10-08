@@ -1,11 +1,11 @@
 const posts = document.getElementById("posts")
 const guess = document.getElementById('guess')
 const logs = document.getElementById('guessLogs')
-const skip = document.getElementById('skip')
+const submit = document.getElementById('submit')
 const mode = document.getElementById('mode')
 const difficulty = document.getElementById('difficulty')
 const videos = document.getElementById('videos')
-const reveal = document.getElementById('reveal')
+const reveal = document.getElementById('reveal_reddit_logo')
 const score = document.getElementById('score')
 const help_open = document.getElementById('helpopen')
 const help_close = document.getElementById('helpclose')
@@ -29,7 +29,7 @@ const normalSkip = 10
 const hardSkip = 50
 
 async function load() {
-    posts.innerHTML = "LOADING NEW POSTS..."
+    posts.innerHTML = "Loading"
     guess.value = ""
     if (playerscore == null) {
         playerscore = 0
@@ -41,7 +41,7 @@ async function load() {
     }
 
     document.getElementById('help_history').innerHTML = localStorage.history + ""
-    const response = await fetch('/data/q?mode='+mode.innerText.toLowerCase()+"&d="+difficulty.innerText+"&suboverride="+SUBREDDIT_OVERRIDE+"&videos="+videos.innerText.toLowerCase())
+    const response = await fetch('/data/q?mode='+mode.checked+"&d="+difficulty.checked+"&suboverride="+SUBREDDIT_OVERRIDE+"&videos="+videos.checked)
     const data = await response.json()
 
     posts.innerHTML = ""
@@ -64,6 +64,7 @@ async function load() {
             let image = new Image()
             image.src = data.data[i]
             image.loading = "lazy"
+            image.classList.add('post_image')
             posts.append(image)
         }
 
@@ -77,10 +78,10 @@ async function load() {
     logs.innerHTML = ""
 
     time_start = performance.now()
-    if (difficulty.innerText == "Hard") {
+    if (difficulty.checked == true) {
         hard_timeout = setTimeout(function() {
-            if (difficulty.innerText == "Hard") {
-                skip.click()
+            if (difficulty.checked == true) {
+                submit.click()
             }
 
         }, 10000)
@@ -88,9 +89,16 @@ async function load() {
 
 }
 
+guess.addEventListener('keyup', function(e) {
+    if (guess.value.length > 0) {
+        submit.innerText = "Guess"
+    } else {
+        submit.innerText = "Skip"
+    }
+})
 
 
-function submit() {
+function submit_guess_or_skip() {
     let value = guess.value.toLowerCase()
     if (value.length < 1) {
         return null
@@ -100,15 +108,7 @@ function submit() {
     if (value == localStorage.getItem('sub').toLowerCase()) {
         time_end = performance.now()
         let m
-        if (difficulty.innerText == "Easy") {
-            let x = ((time_end - time_start)/1000)
-            m = easyWinScore + ((60 - x)*2)
-            if (m < easyWinScore) {
-                m = easyWinScore
-            }
-            m = Math.floor(m)
-            localStorage.setItem('score', parseInt(localStorage.getItem('score')) + m)
-        } else if (difficulty.innerText == "Normal") {
+        if (difficulty.checked == false) {
             let x = ((time_end - time_start)/1000)
             m = normalWinScore + ((60 - x)*2)
             if (m < normalWinScore) {
@@ -116,7 +116,7 @@ function submit() {
             }
             m = Math.floor(m)
             localStorage.setItem('score', parseInt(localStorage.getItem('score')) + m)
-        } else if (difficulty.innerText == "Hard") {
+        } else if (difficulty.checked == true) {
             let x = ((time_end - time_start)/1000)
             m = hardWinScore + ((10 - x)*50)
             if (m < hardWinScore) {
@@ -126,7 +126,9 @@ function submit() {
             localStorage.setItem('score', parseInt(localStorage.getItem('score')) + m)
         }
         playerscore = localStorage.getItem('score')
-        localStorage.setItem('history', localStorage.getItem('history') +"<strong>"+localStorage.score+" pts</strong>: +"+m+" pts for <strong><a href='https://www.reddit.com/r/"+localStorage.getItem('real')+"'>"+value+"</a></strong> in <strong>"+((time_end - time_start)/1000)+"</strong> seconds (<strong>"+difficulty.innerText+"</strong>)<br/>")
+        let difficulty_string = ""
+        if (difficulty.checked == false) { difficulty_string = "Normal" } else { difficulty_string = "Hard" }
+        localStorage.setItem('history', localStorage.getItem('history') +"<strong>"+localStorage.score+" pts</strong>: +"+m+" pts for <strong><a href='https://www.reddit.com/r/"+localStorage.getItem('real')+"'>"+value+"</a></strong> in <strong>"+((time_end - time_start)/1000)+"</strong> seconds (<strong>"+difficulty_string+"</strong>)<br/>")
         localStorage.history = localStorage.history.replaceAll('null', '')
         document.getElementById('help_history').innerHTML = localStorage.history
         scorelast = " (+"+m+")"
@@ -178,23 +180,20 @@ function submit() {
     
 }
 
-skip.onclick = function() {
+submit.onclick = function() {
     clearTimeout(hard_timeout)
     if (!logs.innerHTML.includes('You got it!')) {
-        switch(difficulty.innerText) {
-            case "Easy":
-                localStorage.setItem('score', parseInt(localStorage.getItem('score')) - easySkip)
-                localStorage.setItem('history', localStorage.getItem('history') + "<strong>"+localStorage.score+" pts</strong>: -"+easySkip+" pts because you couldn't guess <a href='https://www.reddit.com/r/"+localStorage.getItem('real')+"'><strong>"+localStorage.getItem('sub')+"</a></strong> (<strong>"+difficulty.innerText+"</strong>)<br/>")
-                scorelast = " (-"+easySkip+")"
-                break;
-            case "Normal":
+        let difficulty_string = ""
+        if (difficulty.checked == false) { difficulty_string = "Normal" } else { difficulty_string = "Hard" }
+        switch(difficulty.checked) {
+            case false:
                 localStorage.setItem('score', parseInt(localStorage.getItem('score')) - normalSkip)
-                localStorage.setItem('history', localStorage.getItem('history') + "<strong>"+localStorage.score+" pts</strong>: -"+normalSkip+" pts because you couldn't guess <a href='https://www.reddit.com/r/"+localStorage.getItem('real')+"'><strong>"+localStorage.getItem('sub')+"</a></strong> (<strong>"+difficulty.innerText+"</strong>)<br/>")
+                localStorage.setItem('history', localStorage.getItem('history') + "<strong>"+localStorage.score+" pts</strong>: -"+normalSkip+" pts because you couldn't guess <a href='https://www.reddit.com/r/"+localStorage.getItem('real')+"'><strong>"+localStorage.getItem('sub')+"</a></strong> (<strong>"+difficulty_string+"</strong>)<br/>")
                 scorelast = " (-"+normalSkip+")"
                 break;
-            case "Hard":
+            case true:
                 localStorage.setItem('score', parseInt(localStorage.getItem('score')) - hardSkip)
-                localStorage.setItem('history', localStorage.getItem('history') + "<strong>"+localStorage.score+" pts</strong>: -"+hardSkip+" pts because you couldn't guess <a href='https://www.reddit.com/r/"+localStorage.getItem('real')+"'><strong>"+localStorage.getItem('sub')+"</a></strong> (<strong>"+difficulty.innerText+"</strong>)<br/>")
+                localStorage.setItem('history', localStorage.getItem('history') + "<strong>"+localStorage.score+" pts</strong>: -"+hardSkip+" pts because you couldn't guess <a href='https://www.reddit.com/r/"+localStorage.getItem('real')+"'><strong>"+localStorage.getItem('sub')+"</a></strong> (<strong>"+difficulty_string+"</strong>)<br/>")
                 scorelast = " (-"+hardSkip+")"
                 break;
         }
@@ -206,45 +205,9 @@ skip.onclick = function() {
     load()
 }
 
-mode.onclick = function() {
-    if (mode.innerText == "Clean") {
-        mode.innerText = "NSFW"
-        mode.style.backgroundColor = "RED"
-        mode.style.color = "black"
-    } else if (mode.innerText == "NSFW") {
-        mode.innerText = "Clean"
-        mode.style.backgroundColor = "BLUE"
-        mode.style.color = "White"
-    }
-}
-
-difficulty.onclick = function() {
-    if (difficulty.innerText == "Normal") {
-        difficulty.innerText = "Hard"
-        difficulty.style.backgroundColor = "RED"
-        difficulty.style.color = "black"
-    } else if (difficulty.innerText == "Easy") {
-        difficulty.innerText = "Normal"
-        difficulty.style.backgroundColor = "BLUE"
-        difficulty.style.color = "White"
-    } else if (difficulty.innerText = "Hard") {
-        difficulty.innerText = "Easy"
-        difficulty.style.backgroundColor = "Lightgreen"
-        difficulty.style.color = "black"
-    }
-}
-
-videos.onclick = function() {
-    if (videos.innerText == "Videos") {
-        videos.innerText = "No videos"
-        videos.style.backgroundColor = "gray"
-    } else {
-        videos.innerText = "Videos"
-        videos.style.backgroundColor = "blue"
-    } 
-}
-
-
+// videos.addEventListener('change', function() {
+//     videos.checked = !videos.checked
+// })
 
 reveal.onclick = function() {
     window.open("https://www.reddit.com/r/"+localStorage.getItem('sub')+"/top")
@@ -255,9 +218,9 @@ guess.addEventListener('keyup', function(event) {
     if (event.keyCode === 13) {
         event.preventDefault()
         if (logs.innerHTML.includes('You got it!')) {
-            skip.click()
+            submit.click()
         } else {
-            submit()
+            submit_guess_or_skip()
         }
 
     }

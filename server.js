@@ -14,7 +14,7 @@ app.get('/', function(req,res) {
 app.get('/data/q', async function(req,res) {
     var endpoint = ""
     var SUBREDDIT_OVERRIDE = req.query.suboverride
-    var videos = req.query.videos // "videos" == yes, "no videos" == no
+    var videos = req.query.videos // "true" or "false", true meaning show videos
     var difficulty = 2
     if (req.query.d.toLowerCase() == "easy") {
         difficulty = 10
@@ -22,9 +22,9 @@ app.get('/data/q', async function(req,res) {
         difficulty = 3
     }
 
-    if (req.query.mode == "clean") {
+    if (req.query.mode == "false") {
         endpoint = "https://www.reddit.com/r/random/top/.json?t=all&count=250" 
-    } else if (req.query.mode == "nsfw") {
+    } else if (req.query.mode == "true") {
         endpoint = "https://www.reddit.com/r/randnsfw/top/.json?t=all&count=250" 
     }
     if (SUBREDDIT_OVERRIDE != "" && SUBREDDIT_OVERRIDE != undefined) {
@@ -66,7 +66,7 @@ app.get('/data/q', async function(req,res) {
                         if (post.data.post_hint == "image" && (post.data.url_overridden_by_dest.includes("imgur") || post.data.url_overridden_by_dest.includes("redd.it")) && !post.data.subreddit.toLowerCase().includes("fans")) {
                             posts.push(post.data.url_overridden_by_dest)
                 
-                        } else if (post.data.post_hint == "link" &&  (post.data.url_overridden_by_dest.includes("imgur")) && !videos.includes("no") && !post.data.subreddit.toLowerCase().includes("fans")) {
+                        } else if (post.data.post_hint == "link" &&  (post.data.url_overridden_by_dest.includes("imgur")) && videos != "false" && !post.data.subreddit.toLowerCase().includes("fans")) {
                             posts.push(post.data.url_overridden_by_dest)
                         } else {
                             //console.log(post.data)

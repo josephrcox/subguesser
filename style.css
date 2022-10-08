@@ -1,5 +1,5 @@
 #guess {
-	height:30px;
+	height:21px;
 	margin-inline: 5px;
 
 	border-radius: 10px;
@@ -10,7 +10,7 @@
 	font-family: inherit;
 	font-style: inherit;
 	font-size: inherit;
-	width: 65vw;
+	width: 60vw;
 	max-width: 400px;
 }
 
@@ -21,18 +21,8 @@ body {
 	font-size: larger;
 }
 
-.options {
-    display: flex;
-	align-items: center;
-	margin-bottom: 20px;
-	/*! border: 1px solid white; */
-	padding-bottom: 10px;
-    flex-wrap: wrap;
-    justify-content: center;
-}
-
-#mode, #submit, #skip, #reveal, #difficulty, #videos {
-	height: 35px;
+#submit {
+	text-align: center;
 	padding-top: 15px;
 	text-decoration: none;
 	background-color: lightgray;
@@ -40,10 +30,15 @@ body {
 	padding-inline: 15px;
 	margin-inline: 5px;
 	border: 1px solid black;
-    cursor: pointer;
+	cursor: pointer;
 	border-radius: 15px;
-	margin-top: 7px;
 	transition: all 0.2s;
+	min-width: 76px;
+	background-color: lightblue;
+	padding: 10px;
+	min-width: 56.8px;
+	display: inline-block;
+	height: max-content;
 	-webkit-touch-callout: none; /* iOS Safari */
 	-webkit-user-select: none; /* Safari */
 	 -khtml-user-select: none; /* Konqueror HTML */
@@ -72,7 +67,7 @@ body {
 }
 
 
-img, video {
+.post_image, video {
   transform: scale(1);
   transition: transform .3s;
   margin: 2px;
@@ -81,7 +76,7 @@ img, video {
   object-fit:contain;
 }
 
-img:hover {
+.post_image:hover {
   transform: scale(1.2);
   z-index: 5;
   filter: drop-shadow(0px 10px 10px #000);
@@ -90,6 +85,8 @@ img:hover {
 #guessLogs {
 	text-align: center;
 	margin-bottom: 20px;
+	margin-top: 20px;
+	color: yellow;
 }
 
 .explore {
@@ -99,8 +96,15 @@ img:hover {
 }
 
 .score {
-    font-size: 19px;
-    color: #a6a6a6;
+    font-size: 13px;
+    color: #fff;
+    position: fixed;
+    bottom: 73px;
+    left: 0px;
+    z-index: 100;
+    background-color: black;
+    padding: 5px;
+    border-radius: 5px;
 }
 
 .header {
@@ -122,7 +126,10 @@ img:hover {
   border-radius: 16px;
   color: black;
   cursor: pointer;
-  margin: 5px;
+  position: fixed;
+  bottom: 26px;
+  left: 5px;
+  z-index: 100;
 }
 
 
@@ -151,11 +158,6 @@ img:hover {
 	border-radius: 30px;
   }
 
-#reveal {
-  background-color: #870000;
-  color: wheat;
-}
-
 .help_content {
   height: 71vh;
   overflow: auto;
@@ -175,13 +177,135 @@ table {
   .title {
 		font-size: 22px;
   }
-	.score {
-		font-size: 13px;
-	}
+
   #mode, #submit, #skip, #reveal, #difficulty, #videos {
 	font-size: 16px;
 	padding: 13px;
 	height: unset;
   }
+	.options_top {
+		flex-direction: column;
+	}
   
+}
+
+#reveal_reddit_logo {
+	max-width: 40px;
+	object-fit: contain;
+	cursor: pointer;
+}
+
+#reveal_reddit_logo::before {
+	content: "(skip)";
+	color: white;
+	font-size: 10px;
+}
+
+#reveal_reddit_logo:hover {
+	transform: scale(1.1);
+}
+
+.switch {
+	position: relative;
+	display: inline-block;
+	width: 60px;
+	height: 34px;
+	margin-left: 10px;
+	margin-right: 10px;
+  }
+  
+  .switch input { 
+	opacity: 0;
+	width: 0;
+	height: 0;
+  }
+  
+  .slider {
+	position: absolute;
+	cursor: pointer;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: #ccc;
+	-webkit-transition: .2s;
+	transition: .2s;
+  }
+  
+  .slider:before {
+	position: absolute;
+	content: "";
+	height: 26px;
+	width: 26px;
+	left: 4px;
+	bottom: 4px;
+	background-color: white;
+	-webkit-transition: .2s;
+	transition: .2s;
+  }
+  
+  input:checked + .slider {
+	background-color: #2196F3;
+  }
+  
+  input:focus + .slider {
+	box-shadow: 0 0 1px #2196F3;
+  }
+  
+  input:checked + .slider:before {
+	-webkit-transform: translateX(26px);
+	-ms-transform: translateX(26px);
+	transform: translateX(26px);
+  }
+  
+  /* Rounded sliders */
+  .slider.round {
+	border-radius: 34px;
+  }
+  
+  .slider.round:before {
+	border-radius: 50%;
+  }
+
+
+.option_label {
+	margin-top: 3px;
+	font-size: 14px;
+}
+
+
+.toggles {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-wrap: wrap;
+  }
+
+.toggles div {
+		display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-wrap: wrap;
+	padding: 5px;
+}
+
+.options {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+  
+  }
+
+
+
+.options div {
+display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    -webkit-box-align: center;
+    align-items: center;
 }
