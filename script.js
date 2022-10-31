@@ -13,7 +13,10 @@ const help_modal = document.getElementById('helpmodal')
 
 var playerscore = localStorage.getItem('score')
 
-let SUBREDDIT_OVERRIDE = ""
+let SUBREDDIT_OVERRIDE = window.location.search.split("override=")[1]
+if (SUBREDDIT_OVERRIDE == null || SUBREDDIT_OVERRIDE == undefined) {
+    SUBREDDIT_OVERRIDE = ""
+}
 
 let time_start
 let time_end
@@ -44,6 +47,10 @@ async function load() {
     const response = await fetch('/data/q?mode='+mode.checked+"&d="+difficulty.checked+"&suboverride="+SUBREDDIT_OVERRIDE+"&videos="+videos.checked)
     const data = await response.json()
 
+    if (data.data.length == 0) {
+        return posts.innerHTML = "No posts found, try again."
+    }
+
     posts.innerHTML = ""
     console.info(data.data.length +" images recieved. ")
     
@@ -59,7 +66,6 @@ async function load() {
             video.loop = true
             video.muted = true
             posts.append(video)
-            //posts.innerHTML += '<video controls preload="metadata" autoplay="false" muted loop="loop"><source src="'+(data.data[i].replace("gifv", "mp4"))+'" type="video/mp4"></video>'
         } else {
             let image = new Image()
             image.src = data.data[i]
@@ -72,7 +78,7 @@ async function load() {
 
 
 
-
+    submit.innerHTML = "Skip"
     localStorage.setItem('sub', data.subreddit)
     localStorage.setItem('real', data.real)
     logs.innerHTML = ""
@@ -136,7 +142,7 @@ function submit_guess_or_skip() {
         clearTimeout(hard_timeout)
 
         logs.innerHTML = "You got it! 🎉 <br/>This was guessed in " + ((time_end - time_start)/1000) + " seconds.<br/> + " + m + " pts"
-
+        submit.innerHTML = "Next"
         
     } else {
         let guessIndex = localStorage.getItem('sub').toLowerCase().indexOf(value)
